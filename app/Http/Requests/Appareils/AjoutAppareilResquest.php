@@ -15,20 +15,30 @@ class AjoutAppareilResquest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'power_watt' => (int) $this->power_watt,
+            'usage' => (int) $this->usage,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+
+
+
     public function rules(): array
     {
         return [
             //
             "name" => ["required", "string"],
             "power_watt" => ["required", "integer"],
-            "owner" => ["required", "string"],
-            "usage" => ["required"],
-            "email" => ["required", "email"]
+            "owner" => ["required", "email"],
+            "usage" => ["required", "integer"],
         ];
     }
 }

@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('foyer_id')->constrained()->cascadeOnDelete();
-            $table->decimal('usage', 8, 2);
+            $table->decimal('usage', 2, 2);
             $table->integer('power_watt');
             $table->timestamps();
         });

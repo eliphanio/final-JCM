@@ -1,6 +1,9 @@
+import { Head } from "@inertiajs/react";
+
 export default function Absence() {
     return (
         <>
+            <Head title="Absence" />
             <h1>Absence</h1>
         </>
     );

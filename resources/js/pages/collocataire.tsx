@@ -1,6 +1,9 @@
+import { Head } from "@inertiajs/react";
+
 export default function Collocataire() {
     return (
         <>
+            <Head title="Collocataire" />
             <h1>Collocataire</h1>
         </>
     );
