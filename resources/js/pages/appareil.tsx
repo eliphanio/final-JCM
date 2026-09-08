@@ -1,13 +1,17 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Head } from '@inertiajs/react';
-import { Dialog, DialogContent, DialogTrigger } from '@radix-ui/react-dialog';
-import { Item } from '@radix-ui/react-dropdown-menu';
+import { Head, router, usePage } from '@inertiajs/react';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogHeader,
+    DialogTrigger,
+} from '@/components/ui/dialog'; import { Item } from '@radix-ui/react-dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Delete, Plus, TrashIcon } from 'lucide-react';
-import { DialogHeader } from '@/components/ui/dialog';
 import CreateAppareilModal from '@/components/create-appareil-modal';
 import Heading from '@/components/heading';
+import destroy from '@/routes/destroy';
 
 interface Device {
     id: number;
@@ -25,7 +29,11 @@ interface AppareilProps {
 }
 export default function Appareil({ devices }: AppareilProps) {
 
-
+    const page = usePage<{
+        currentFoyer: {
+            slug: string;
+        };
+    }>();
 
     return (
         <>
@@ -67,9 +75,33 @@ export default function Appareil({ devices }: AppareilProps) {
                                                 <TableCell>{device.usage}</TableCell>
                                                 <TableCell>{device.power_watt}</TableCell>
                                                 <TableCell>
-                                                    <Button className='bg-red-500' size="sm">
-                                                        <TrashIcon  />
-                                                    </Button>
+                                                    <Dialog>
+                                                        <DialogTrigger asChild>
+                                                            <Button variant="destructive" className="h-8 w-8 p-0">
+                                                                <TrashIcon className="h-4 w-4" />
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent className="sm:max-w-106.25">
+                                                            <DialogHeader>
+                                                                <h3 className="text-lg font-semibold">
+                                                                    Supprimer l'appareil
+                                                                </h3>
+                                                                <p className="text-sm text-muted-foreground">
+                                                                    Êtes-vous sûr de vouloir supprimer cet appareil ? Cette action ne peut pas être annulée.
+                                                                </p>
+                                                            </DialogHeader>
+                                                            <div className="flex justify-end space-x-2">
+                                                                <DialogClose asChild>
+                                                                    <Button variant="outline">Annuler</Button>
+                                                                </DialogClose>
+                                                                <Button variant="destructive" onClick={() => {
+                                                                    router.delete(destroy.appareil(
+                                                                        { current_foyer: page.props.currentFoyer.slug, appareil: device.id }).url)
+                                                                }}>Supprimer
+                                                                </Button>
+                                                            </div>
+                                                        </DialogContent>
+                                                    </Dialog>
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -84,7 +116,7 @@ export default function Appareil({ devices }: AppareilProps) {
                     )
                     }
                 </div>
-            </div>
+            </div >
 
         </>
     );

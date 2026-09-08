@@ -31,4 +31,17 @@ class AppareilController extends Controller
 
         return redirect()->route('layout.appareil', ['foyer' => $current_foyer->id])->with('success', 'Appareil ajouté avec succès.');
     }
+
+    public function destroy(Foyer $current_foyer, Appareil $appareil)
+    {
+        // Vérifier si l'appareil appartient au foyer actuel
+        if ($appareil->foyer_id !== $current_foyer->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Supprimer l'appareil
+        $appareil->delete();
+
+        return redirect()->route('layout.appareil', ['foyer' => $current_foyer->id])->with('success', 'Appareil supprimé avec succès.');
+    }
 }
