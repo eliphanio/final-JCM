@@ -72,8 +72,8 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
                                     <TableBody>
 
                                         {
-                                            absenceRequests.map((absenceRequest) => [
-                                                <TableRow>
+                                            absenceRequests.map((absenceRequest) => (
+                                                <TableRow key={absenceRequest.id}>
                                                     <TableCell>{absenceRequest.user.name}</TableCell>
                                                     <TableCell>{new Date(absenceRequest.start_day).toLocaleDateString(
                                                         'fr-FR',
@@ -115,7 +115,7 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
                                                                     <Button className='bg-green-500 hover:bg-green-400' onClick={() => {
                                                                         router.post(accept.absence(
                                                                             { current_foyer: page.props.currentFoyer.slug, absenceRequest: absenceRequest.id }).url)
-                                                                    }}>Accepté
+                                                                    }} >Accepté
                                                                     </Button>
                                                                 </div>
                                                             </DialogContent>
@@ -123,7 +123,7 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
 
                                                     </TableCell>
                                                 </TableRow>
-                                            ])
+                                            ))
                                         }
 
                                     </TableBody>
