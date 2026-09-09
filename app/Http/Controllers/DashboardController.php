@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AbsenceRequest;
+use App\Models\Foyer;
 use App\Models\FoyerInvitation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -9,7 +11,7 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, Foyer $current_foyer): Response
     {
         $email = strtolower($request->user()->email);
 
@@ -33,6 +35,7 @@ class DashboardController extends Controller
 
         return Inertia::render('dashboard', [
             'pendingInvitations' => $pendingInvitations,
+             'absenceRequests' => AbsenceRequest::with('user')->where('foyer_id', $current_foyer->id)->get(),
         ]);
     }
 }

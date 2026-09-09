@@ -7,6 +7,7 @@ use App\Http\Controllers\FactureController;
 use App\Http\Controllers\Foyers\FoyerInvitationController;
 use App\Http\Controllers\Foyers\FoyerMemberController;
 use App\Http\Middleware\EnsureFoyerMembership;
+use App\Models\AbsenceRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -21,6 +22,8 @@ Route::prefix('{current_foyer}')
         Route::get('collocataires', [FoyerMemberController::class, 'layoutMember'])->name('layout.collocataires');
         Route::get('factures', [FactureController::class, 'layoutFacture'])->name('layout.factures');
         Route::get('absences', [AbsenceController::class, 'layoutAbsence'])->name('layout.absences');
+        Route::post('absences', [AbsenceController::class, 'RequestAbsence'])->name('request.absence');
+        Route::post('absences/{absenceRequest}/accept', [AbsenceController::class, 'AcceptAbsence'])->name('accept.absence');
     });
 
 Route::middleware(['auth'])->group(function () {

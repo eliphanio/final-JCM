@@ -4,15 +4,22 @@ import PendingInvitationsModal from '@/components/pending-invitations-modal';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
 import type { DashboardInvitation } from '@/types';
+// import PendingAbsenceModal from '@/components/pending-absence-modal';
 
 type Props = {
     pendingInvitations?: DashboardInvitation[];
 };
 
-export default function Dashboard({ pendingInvitations = [] }: Props) {
+
+
+export default function Dashboard({ pendingInvitations = [] }: Props ){
+    
     const [showInvitations, setShowInvitations] = useState(
         pendingInvitations.length > 0,
     );
+    // const [showAbsences, setShowAbsences] = useState(
+    //     absenceRequests.length > 0,
+    // );
 
     return (
         <>
@@ -22,6 +29,11 @@ export default function Dashboard({ pendingInvitations = [] }: Props) {
                 open={pendingInvitations.length > 0 && showInvitations}
                 onOpenChange={setShowInvitations}
             />
+            {/* {<PendingAbsenceModal
+                absences={absenceRequests}
+                open={absenceRequests.length > 0 && showAbsences}
+                onOpenChange={setShowAbsences}
+            />} */}
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">

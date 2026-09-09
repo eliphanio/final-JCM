@@ -18,4 +18,12 @@ class AbsenceRequest extends Model
 
     protected $fillable = ['start_day', 'end_day', 'user_id', 'foyer_id', 'status'];
     protected $guarded = ['id'];
+
+    protected function casts(): array
+    {
+        return [
+            'start_day' => 'date',
+            'end_day' => 'date',
+        ];
+    }
 }

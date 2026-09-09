@@ -41,6 +41,20 @@ export type DashboardInvitation = {
     };
 };
 
+export type DashboardAbsenceRequest = {
+    id: number;
+    user: {
+        id: number;
+        name: string;
+    };
+    foyer: {
+        name: string
+    };
+    start_date: string;
+    end_date: string;
+    reason: string;
+};
+
 export type FoyerPermissions = {
     canUpdateFoyer: boolean;
     canDeleteFoyer: boolean;
