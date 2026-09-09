@@ -6,7 +6,8 @@ import {
     DialogContent,
     DialogHeader,
     DialogTrigger,
-} from '@/components/ui/dialog'; import { Item } from '@radix-ui/react-dropdown-menu';
+} from '@/components/ui/dialog';
+import { Item } from '@radix-ui/react-dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Delete, Plus, TrashIcon } from 'lucide-react';
 import CreateAppareilModal from '@/components/create-appareil-modal';
