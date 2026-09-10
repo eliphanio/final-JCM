@@ -46,6 +46,11 @@ class User extends Authenticatable implements PasskeyUser
      *
      * @return array<string, string>
      */
+
+    public function appareils(){
+        return $this->hasMany(Appareil::class);
+    }
+
     protected function casts(): array
     {
         return [

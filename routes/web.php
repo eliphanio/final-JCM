@@ -21,6 +21,8 @@ Route::prefix('{current_foyer}')
         Route::delete('appareils/{appareil}', [AppareilController::class, 'destroy'])->name('destroy.appareil');
         Route::get('collocataires', [FoyerMemberController::class, 'layoutMember'])->name('layout.collocataires');
         Route::get('factures', [FactureController::class, 'layoutFacture'])->name('layout.factures');
+        Route::post('factures', [FactureController::class, 'ajoutFacture'])->name('ajout.factures');
+        Route::post('factures/{repartition}', [FactureController::class, 'payeFacture'])->name('paye.factures');
         Route::get('absences', [AbsenceController::class, 'layoutAbsence'])->name('layout.absences');
         Route::post('absences', [AbsenceController::class, 'RequestAbsence'])->name('request.absence');
         Route::post('absences/{absenceRequest}/accept', [AbsenceController::class, 'AcceptAbsence'])->name('accept.absence');

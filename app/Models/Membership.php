@@ -28,6 +28,9 @@ class Membership extends Pivot
      */
     protected $table = 'foyer_members';
 
+    public function appareils(){
+        return $this->hasMany(Appareil::class);
+    }
     /**
      * Indicates if the IDs are auto-incrementing.
      *

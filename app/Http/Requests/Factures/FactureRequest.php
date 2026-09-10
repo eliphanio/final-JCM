@@ -12,7 +12,7 @@ class FactureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,11 @@ class FactureRequest extends FormRequest
     {
         return [
             //
+            'eau' => ['required', 'numeric'],
+            'electricite' => ['required', 'numeric'],
+            'periode' => ['required'],
+            'consomation' => ['required'],
+            'due_date' => ['required']
         ];
     }
 }

@@ -1,4 +1,4 @@
-import { Form } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
 import { useState } from 'react';
 import InputError from '@/components/input-error';
@@ -16,9 +16,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { store } from '@/routes/foyers';
+import { factures } from '@/routes/ajout';
 
 export default function CreateFacturerModal({ children }: PropsWithChildren) {
     const [open, setOpen] = useState(false);
+    const page = usePage<{
+        currentFoyer: {
+            slug: string;
+        };
+    }>();
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -26,7 +32,8 @@ export default function CreateFacturerModal({ children }: PropsWithChildren) {
             <DialogContent>
                 <Form
                     key={String(open)}
-                    {...store.form()}
+                    action={factures(page.props.currentFoyer.slug).url}
+                    method='post'
                     className="space-y-6"
                     onSuccess={() => setOpen(false)}
                 >
