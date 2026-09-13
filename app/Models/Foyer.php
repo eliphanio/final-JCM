@@ -35,6 +35,12 @@ class Foyer extends Model
     /**
      * Bootstrap the model and its traits.
      */
+    
+    public function appareils()
+    {
+        return $this->hasMany(Appareil::class);
+    }
+
     protected static function boot(): void
     {
         parent::boot();

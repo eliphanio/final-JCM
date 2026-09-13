@@ -11,7 +11,11 @@ class Appareil extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function foyers(){
+    public function membership(){
+        return $this->belongsTo(Membership::class);
+    }
+
+    public function foyer(){
         return $this->belongsTo(Foyer::class, 'foyer_id');
     }
 

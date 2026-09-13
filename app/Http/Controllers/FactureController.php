@@ -7,8 +7,10 @@ use App\Http\Requests\Factures\PayementResquest;
 use App\Models\Absence;
 use App\Models\Facture;
 use App\Models\Foyer;
+use App\Models\Membership;
 use App\Models\Payement;
 use App\Models\Repartition;
+use App\Models\User;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
@@ -17,15 +19,23 @@ class FactureController extends Controller
     //
     public function layoutFacture(Foyer $current_foyer)
     {
-         $repartitions = Repartition::with(['user', 'facture'])
+        $repartitions = Repartition::with(['user', 'facture'])
             ->whereHas('facture', function ($query) use ($current_foyer) {
                 $query->where('foyer_id', $current_foyer->id);
             })
             ->get();
 
+        $facture = Facture::with('foyer')->where('foyer_id', $current_foyer->id)
+            ->latest()
+            ->first();
+
+        // dd($facture);
+
+
         return Inertia::render('facture', [
-            "repartitions"=>$repartitions,
-            "foyer"=>$current_foyer
+            "repartitions" => $repartitions,
+            "foyer" => $current_foyer,
+            "facture" => $facture
         ]);
     }
 
@@ -82,11 +92,16 @@ class FactureController extends Controller
 
         $members = $current_foyer->members;
 
+
         $repartitionData = [];
 
         $totalCoefPresence = 0;
 
         $totalPartAppareils = 0;
+
+        /**
+         * @var User $member
+         */
 
         foreach ($members as $member) {
 
@@ -211,7 +226,7 @@ class FactureController extends Controller
 
             // Calcul appareils
 
-            $devices = $member->appareils->where('foyer_id', $current_foyer->id)->get();
+            $devices = $member->appareils()->where('foyer_id', $current_foyer->id)->get();
 
             $partAppareil = 0;
 
@@ -307,6 +322,9 @@ class FactureController extends Controller
                 $item['part_appareil'],
 
                 'total' =>
+                $total,
+
+                'reste' =>
                 $total
             ]);
 
@@ -316,14 +334,24 @@ class FactureController extends Controller
 
     public function payeFacture(Foyer $current_foyer, Repartition $repartition, PayementResquest $request)
     {
-       
+
         $data = $request->validated();
 
         $data['repartition_id'] = $repartition->id;
         $data['paye_le'] = now();
 
         // $this->authorize('adminOrModerator', $current_foyer);
+        // dd($data);
 
         $paid = Payement::create($data);
+
+        $reste = Repartition::where("id", $data['repartition_id'])->value('total') - Payement::where('repartition_id', $data['repartition_id'])->sum('amount');
+
+        $update = Repartition::where('id', $data['repartition_id'])->update([
+            'reste' => $reste
+        ]);
+
+
+        return back();
     }
 }

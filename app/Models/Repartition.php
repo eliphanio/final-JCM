@@ -19,6 +19,6 @@ class Repartition extends Model
         return $this->hasMany(Payement::class);
     }
 
-    protected $fillable = ['user_id','facture_id', 'part_commun', 'total', 'part_appareil', 'coef_presence'];
+    protected $fillable = ['user_id','facture_id', 'part_commun', 'total', 'part_appareil', 'coef_presence', 'reste'];
     protected $guarded = ['id'];
 }
