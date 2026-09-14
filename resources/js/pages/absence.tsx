@@ -54,7 +54,7 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
                     </CreateAbsenceModal>
                 </div>
 
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative flex-1 overflow-hidden rounded-xl border md:min-h-min p-5">
+                <div className="border-sidebar-border/70 dark:border-sidebar-border relative flex-1 overflow-hidden rounded-xl border md:min-h-min p-5 m-3">
 
                     {
                         absenceRequests.length !== 0 ? (
@@ -136,59 +136,60 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
                     }
 
                 </div>
+                <div className=" gap-4 overflow-x-auto rounded-xl px-3">
+                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative flex-1 overflow-hidden rounded-xl border md:min-h-min p-5">
+
+                        {
+                            absences.length !== 0 ? (
+                                <>
+                                    <h2>Absence accepé</h2>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nom</TableHead>
+                                                <TableHead>Départ</TableHead>
+                                                <TableHead>Retour</TableHead>
+                                                <TableHead>Motif</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {
+                                                absences.map((absence) => [
+                                                    <TableRow>
+                                                        <TableCell>{absence.user.name}</TableCell>
+                                                        <TableCell>{new Date(absence.end_day).toLocaleDateString(
+                                                            'fr-FR',
+                                                            {
+                                                                day: 'numeric',
+                                                                month: 'long',
+                                                                year: 'numeric',
+                                                            }
+                                                        )}</TableCell>
+                                                        <TableCell>{new Date(absence.end_day).toLocaleDateString(
+                                                            'fr-FR',
+                                                            {
+                                                                day: 'numeric',
+                                                                month: 'long',
+                                                                year: 'numeric',
+                                                            }
+                                                        )}</TableCell>
+                                                        <TableCell>Pas encore operationnel</TableCell>
+                                                    </TableRow>
+                                                ])
+                                            }
+                                        </TableBody>
+                                    </Table>
+
+                                </>
+                            ) : (
+                                <h2>Aucune demande accepté</h2>
+                            )
+                        }
+
+                    </div>
+                </div >
             </div >
-            <div className=" gap-4 overflow-x-auto rounded-xl p-5 px-8">
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative flex-1 overflow-hidden rounded-xl border md:min-h-min p-5">
 
-                    {
-                        absences.length !== 0 ? (
-                            <>
-                                <h2>Absence accepé</h2>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Nom</TableHead>
-                                            <TableHead>Départ</TableHead>
-                                            <TableHead>Retour</TableHead>
-                                            <TableHead>Motif</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {
-                                            absences.map((absence) => [
-                                                <TableRow>
-                                                    <TableCell>{absence.user.name}</TableCell>
-                                                    <TableCell>{new Date(absence.end_day).toLocaleDateString(
-                                                        'fr-FR',
-                                                        {
-                                                            day: 'numeric',
-                                                            month: 'long',
-                                                            year: 'numeric',
-                                                        }
-                                                    )}</TableCell>
-                                                    <TableCell>{new Date(absence.end_day).toLocaleDateString(
-                                                        'fr-FR',
-                                                        {
-                                                            day: 'numeric',
-                                                            month: 'long',
-                                                            year: 'numeric',
-                                                        }
-                                                    )}</TableCell>
-                                                    <TableCell>Pas encore operationnel</TableCell>
-                                                </TableRow>
-                                            ])
-                                        }
-                                    </TableBody>
-                                </Table>
-
-                            </>
-                        ) : (
-                            <h2>Aucune demande accepté</h2>
-                        )
-                    }
-
-                </div>
-            </div >
 
         </>
     );

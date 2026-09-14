@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Foyers;
 use App\Enums\FoyerRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Foyers\UpdateFoyerMemberRequest;
+use App\Models\Membership;
 use App\Models\Foyer;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -17,9 +19,43 @@ class FoyerMemberController extends Controller
      * Update the specified foyer member's role.
      */
 
-    public function layoutMember(Foyer $foyer){
+    public function layoutMember(Request $request, Foyer $current_foyer){
 
-        return Inertia::render('collocataire');
+        $user = $request->user();
+
+        return Inertia::render('collocataire', [
+            'foyer' => [
+                'id' => $current_foyer->id,
+                'name' => $current_foyer->name,
+                'slug' => $current_foyer->slug,
+                'isPersonal' => $current_foyer->is_personal,
+            ],
+            'members' => $current_foyer->members()->get()->map(function (User $member) {
+                /** @var Membership $membership */
+                $membership = $member->getRelation('pivot');
+
+                return [
+                    'id' => $member->id,
+                    'name' => $member->name,
+                    'email' => $member->email,
+                    'avatar' => $member->avatar ?? null,
+                    'role' => $membership->role->value,
+                    'role_label' => $membership->role->label(),
+                ];
+            }),
+            'invitations' => $current_foyer->invitations()
+                ->whereNull('accepted_at')
+                ->get()
+                ->map(fn ($invitation) => [
+                    'code' => $invitation->code,
+                    'email' => $invitation->email,
+                    'role' => $invitation->role->value,
+                    'role_label' => $invitation->role->label(),
+                    'created_at' => $invitation->created_at->toISOString(),
+                ]),
+            'permissions' => $user->toFoyerPermissions($current_foyer),
+            'availableRoles' => FoyerRole::assignable(),
+        ]);
 
     }
 

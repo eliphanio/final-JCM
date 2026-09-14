@@ -36,7 +36,7 @@ class FoyerInvitationController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Invitation sent.')]);
 
-        return to_route('foyers.edit', ['foyer' => $foyer->slug]);
+        return back();
     }
 
     /**
