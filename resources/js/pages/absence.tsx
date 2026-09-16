@@ -157,7 +157,7 @@ export default function Absence({ absenceRequests, absences }: AbsenceProps) {
                                                 absences.map((absence) => [
                                                     <TableRow>
                                                         <TableCell>{absence.user.name}</TableCell>
-                                                        <TableCell>{new Date(absence.end_day).toLocaleDateString(
+                                                        <TableCell>{new Date(absence.start_day).toLocaleDateString(
                                                             'fr-FR',
                                                             {
                                                                 day: 'numeric',

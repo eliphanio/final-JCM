@@ -12,10 +12,6 @@ import type {
 import { useState } from "react";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { ChevronDown } from "lucide-react";
-import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { useInitials } from "@/hooks/use-initials";
 
 type Props = {
@@ -68,7 +64,7 @@ export default function Collocataire({
                     ) : null}
 
                 </div>
-                <div className="flex gap-2 m-3 wrap">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-2 m-3">
                     {
                         members.map((member) => (
                             <div
