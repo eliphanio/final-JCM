@@ -70,7 +70,7 @@ export default function Absence({ absenceRequests, absences, permissions }: Abse
                                                     <TableHead>Nom</TableHead>
                                                     <TableHead>Départ</TableHead>
                                                     <TableHead>Retour</TableHead>
-                                                    <TableHead>Motif</TableHead>
+                                                    {/* <TableHead>Motif</TableHead> */}
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
@@ -95,7 +95,7 @@ export default function Absence({ absenceRequests, absences, permissions }: Abse
                                                                     year: 'numeric',
                                                                 }
                                                             )}</TableCell>
-                                                            <TableCell>Pas encore operationnel</TableCell>
+                                                            {/* <TableCell>Pas encore operationnel</TableCell> */}
                                                             <TableCell>
                                                                 <Dialog>
                                                                     <DialogTrigger asChild>
@@ -156,7 +156,7 @@ export default function Absence({ absenceRequests, absences, permissions }: Abse
                                                 <TableHead>Nom</TableHead>
                                                 <TableHead>Départ</TableHead>
                                                 <TableHead>Retour</TableHead>
-                                                <TableHead>Motif</TableHead>
+                                                {/* <TableHead>Motif</TableHead> */}
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -180,7 +180,7 @@ export default function Absence({ absenceRequests, absences, permissions }: Abse
                                                                 year: 'numeric',
                                                             }
                                                         )}</TableCell>
-                                                        <TableCell>Pas encore operationnel</TableCell>
+                                                        {/* <TableCell>Pas encore operationnel</TableCell> */}
                                                     </TableRow>
                                                 ])
                                             }
