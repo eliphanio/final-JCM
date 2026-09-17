@@ -7,14 +7,16 @@ use App\Models\Absence;
 use App\Models\AbsenceRequest;
 use App\Models\Foyer;
 use App\Services\AbsenceService;
+use Illuminate\Auth\Access\Gate;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AbsenceController extends Controller
 {
     //
-    public function layoutAbsence(Foyer $current_foyer)
+    public function layoutAbsence(Foyer $current_foyer, Request $request)
     {
-
+        $user = $request->user();
         $absenceRequests = AbsenceRequest::with('user')->where('foyer_id', $current_foyer->id)->get();
         $absences = Absence::with('user')->where('foyer_id', $current_foyer->id)->get();
 
@@ -24,6 +26,8 @@ class AbsenceController extends Controller
             'foyer' => $current_foyer,
             'absenceRequests' => $absenceRequests,
             'absences' => $absences,
+            'permissions' => $user->toFoyerPermissions($current_foyer),
+
         ]);
     }
 
@@ -38,9 +42,6 @@ class AbsenceController extends Controller
 
     public function AcceptAbsence($current_foyer, AbsenceRequest $absenceRequest, AbsenceService $service)
     {
-        // dd($absenceRequest);
-
         $service->AcceptAbsence($absenceRequest);
-
     }
 }

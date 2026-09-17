@@ -61,6 +61,7 @@ class FoyerPolicy
     /**
      * Determine whether the user can update a member's role in the foyer.
      */
+
     public function updateMember(User $user, Foyer $foyer): bool
     {
         return $user->hasFoyerPermission($foyer, FoyerPermission::UpdateMember);
@@ -96,5 +97,26 @@ class FoyerPolicy
     public function delete(User $user, Foyer $foyer): bool
     {
         return ! $foyer->is_personal && $user->hasFoyerPermission($foyer, FoyerPermission::DeleteFoyer);
+    }
+
+    public function addFacture(User $user, Foyer $foyer): bool
+    {
+        return $user->hasFoyerPermission($foyer, FoyerPermission::AddFacture);
+    }
+    public function addAppareil(User $user, Foyer $foyer): bool
+    {
+        return $user->hasFoyerPermission($foyer, FoyerPermission::AddAppareil);
+    }
+    public function removeAppareil(User $user, Foyer $foyer): bool
+    {
+        return $user->hasFoyerPermission($foyer, FoyerPermission::RemoveAppareil);
+    }
+    public function effectuePayement(User $user, Foyer $foyer): bool
+    {
+        return $user->hasFoyerPermission($foyer, FoyerPermission::EffectuePayement);
+    }
+    public function acceptAbsence(User $user, Foyer $foyer): bool
+    {
+        return $user->hasFoyerPermission($foyer, FoyerPermission::AcceptAbsence);
     }
 }

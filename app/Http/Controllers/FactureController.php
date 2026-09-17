@@ -12,13 +12,17 @@ use App\Models\Payement;
 use App\Models\Repartition;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class FactureController extends Controller
 {
     //
-    public function layoutFacture(Foyer $current_foyer)
+    public function layoutFacture(Foyer $current_foyer, Request $request)
     {
+        $user = $request->user();
+
         $repartitions = Repartition::with(['user', 'facture'])
             ->whereHas('facture', function ($query) use ($current_foyer) {
                 $query->where('foyer_id', $current_foyer->id);
@@ -35,30 +39,34 @@ class FactureController extends Controller
         return Inertia::render('facture', [
             "repartitions" => $repartitions,
             "foyer" => $current_foyer,
-            "facture" => $facture
+            "facture" => $facture,
+            'permissions' => $user->toFoyerPermissions($current_foyer),
+
         ]);
     }
 
     public function ajoutFacture(Foyer $current_foyer, FactureRequest $request)
     {
+        Gate::authorize('AddFacture', $current_foyer);
+
+
         $data = $request->validated();
 
-        $mois = $data['periode'];
-        try {
-            Carbon::setLocale('fr');
-            $numMois = Carbon::createFromLocaleFormat('F', 'fr', $mois)->month;
-        } catch (\Exception $e) {
-            return back()->withErrors(['periode' => 'Le mois saisi est invalide.']);
-        }
-
-        $periode = Carbon::create(now()->year, $numMois, 1)->format('Y-m-d');
+        $mois = (int) $data['periode'];
+        $periode = Carbon::create(
+            now()->year,
+            $mois,
+            1
+        )->format('Y-m-d');
 
         $exists = Facture::where('foyer_id', $current_foyer->id)
             ->where('periode', $periode)
             ->exists();
 
         if ($exists) {
-            return back()->withErrors(['message' => 'Facture déjà créée pour ce mois']);
+            return back()->withErrors([
+                'periode' => 'Une facture existe déjà pour cette période dans ce foyer.'
+            ]);
         }
 
         $data['periode'] = $periode;
@@ -334,6 +342,8 @@ class FactureController extends Controller
 
     public function payeFacture(Foyer $current_foyer, Repartition $repartition, PayementResquest $request)
     {
+        Gate::authorize('effectuePayement', $current_foyer);
+
 
         $data = $request->validated();
 

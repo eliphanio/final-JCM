@@ -10,7 +10,8 @@ use App\Http\Middleware\EnsureFoyerMembership;
 use App\Models\AbsenceRequest;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+
+Route::redirect('/', '/login')->name('home');
 
 Route::prefix('{current_foyer}')
     ->middleware(['auth', 'verified', EnsureFoyerMembership::class])

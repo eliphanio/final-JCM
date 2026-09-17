@@ -63,6 +63,11 @@ export type FoyerPermissions = {
     canRemoveMember: boolean;
     canCreateInvitation: boolean;
     canCancelInvitation: boolean;
+    canAddFacture: boolean;
+    canAddAppareil: boolean;
+    canRemoveAppareil: boolean;
+    canPaid: boolean;
+    canAcceptAbsence: boolean;
 };
 
 export type RoleOption = {

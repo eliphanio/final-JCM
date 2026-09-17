@@ -36,7 +36,6 @@ export default function Login({
                 />
             )}
 
-            <PasskeyVerify />
 
             <Form
                 {...store.form()}

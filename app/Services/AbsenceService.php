@@ -5,27 +5,64 @@ namespace App\Services;
 use App\Models\Absence;
 use App\Models\AbsenceRequest;
 use App\Models\Foyer;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 class AbsenceService
 {
     //
-    public function DemandeAbsence(array $data, Foyer $foyer){
+    public function DemandeAbsence(array $data, Foyer $foyer)
+    {
 
-        $data['user_id'] = Auth::id();
+        $userId = Auth::id();
 
+        $startDay = Carbon::parse($data['start_day'])->startOfDay();
+        $endDay = Carbon::parse($data['end_day'])->startOfDay();
+
+        // Vérifier que la date de fin est correcte
+        if ($endDay->lt($startDay)) {
+            throw ValidationException::withMessages([
+                'end_day' => 'La date de retour doit être après la date de départ.'
+            ]);
+        }
+
+        // Vérifier les chevauchements avec les demandes en attente
+        $overlapRequest = AbsenceRequest::where('user_id', $userId)
+            ->where('foyer_id', $foyer->id)
+            ->whereIn('status', ['En attente'])
+            ->where('start_day', '<=', $endDay->toDateString())
+            ->where('end_day', '>=', $startDay->toDateString())
+            ->exists();
+
+        // Vérifier les chevauchements avec les absences déjà acceptées
+        $overlapAbsence = Absence::where('user_id', $userId)
+            ->where('foyer_id', $foyer->id)
+            ->where('start_day', '<=', $endDay->toDateString())
+            ->where('end_day', '>=', $startDay->toDateString())
+            ->exists();
+
+        if ($overlapRequest || $overlapAbsence) {
+            throw ValidationException::withMessages([
+                'start_day' => 'Cette période chevauche une autre absence existante.'
+            ]);
+        }
+
+        // Préparer les données
+        $data['user_id'] = $userId;
         $data['foyer_id'] = $foyer->id;
-
         $data['status'] = 'En attente';
 
+        // Enregistrer la demande
         AbsenceRequest::create($data);
-
     }
 
-    public function AcceptAbsence(AbsenceRequest $request){
+    public function AcceptAbsence(AbsenceRequest $request)
+    {
 
-        
-        // $this->authorize('AcceptAbsence', $foyer);
+        $foyer = Foyer::findOrFail($request->foyer_id);
+        Gate::authorize('acceptAbsence', $foyer);
 
         $request->update([
             'status' => 'Accepté'
@@ -45,5 +82,4 @@ class AbsenceService
         // AbsenceRequest::where('status', 'Accepté')->delete();
 
     }
-
 }

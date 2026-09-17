@@ -13,6 +13,7 @@ import { Delete, Plus, TrashIcon } from 'lucide-react';
 import CreateAppareilModal from '@/components/create-appareil-modal';
 import Heading from '@/components/heading';
 import destroy from '@/routes/destroy';
+import { FoyerPermissions } from '@/types';
 
 interface Device {
     id: number;
@@ -27,8 +28,9 @@ interface Device {
 
 interface AppareilProps {
     devices: Device[];
+    permissions: FoyerPermissions,
 }
-export default function Appareil({ devices }: AppareilProps) {
+export default function Appareil({ devices, permissions }: AppareilProps) {
 
     const page = usePage<{
         currentFoyer: {
@@ -47,11 +49,15 @@ export default function Appareil({ devices }: AppareilProps) {
                         title="Appareil"
                         description="Gérer vos appareils et leurs informations"
                     />
-                    <CreateAppareilModal>
-                        <Button >
-                            <Plus /> Ajouter un appareil
-                        </Button>
-                    </CreateAppareilModal>
+                    {
+                        permissions.canAddAppareil ? (
+                            <CreateAppareilModal>
+                                <Button >
+                                    <Plus /> Ajouter un appareil
+                                </Button>
+                            </CreateAppareilModal>
+                        ) : null
+                    }
                 </div>
 
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative flex-1 overflow-hidden rounded-xl border md:min-h-min p-5">
@@ -75,7 +81,9 @@ export default function Appareil({ devices }: AppareilProps) {
                                                 <TableCell>{device.user.name}</TableCell>
                                                 <TableCell>{device.usage}</TableCell>
                                                 <TableCell>{device.power_watt}</TableCell>
-                                                <TableCell>
+                                                {
+                                                    permissions.canRemoveAppareil ? (
+                                                        <TableCell>
                                                     <Dialog>
                                                         <DialogTrigger asChild>
                                                             <Button variant="destructive" className="h-8 w-8 p-0">
@@ -104,6 +112,8 @@ export default function Appareil({ devices }: AppareilProps) {
                                                         </DialogContent>
                                                     </Dialog>
                                                 </TableCell>
+                                                    ) : null
+                                                }
                                             </TableRow>
                                         ))
                                     }

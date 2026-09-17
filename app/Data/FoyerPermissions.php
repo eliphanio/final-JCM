@@ -12,6 +12,11 @@ readonly class FoyerPermissions
         public bool $canRemoveMember,
         public bool $canCreateInvitation,
         public bool $canCancelInvitation,
+        public bool $canAddFacture,
+        public bool $canPaid,
+        public bool $canAddAppareil,
+        public bool $canRemoveAppareil,
+        public bool $canAcceptAbsence,
     ) {
         //
     }

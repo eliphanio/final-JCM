@@ -175,6 +175,11 @@ trait HasFoyers
             canRemoveMember: $role?->hasPermission(FoyerPermission::RemoveMember) ?? false,
             canCreateInvitation: $role?->hasPermission(FoyerPermission::CreateInvitation) ?? false,
             canCancelInvitation: $role?->hasPermission(FoyerPermission::CancelInvitation) ?? false,
+            canAddFacture: $role?->hasPermission(FoyerPermission::AddFacture) ?? false,
+            canPaid: $role?->hasPermission(FoyerPermission::EffectuePayement) ?? false,
+            canAddAppareil: $role?->hasPermission(FoyerPermission::AddAppareil) ?? false,
+            canRemoveAppareil: $role?->hasPermission(FoyerPermission::RemoveAppareil) ?? false,
+            canAcceptAbsence: $role?->hasPermission(FoyerPermission::AcceptAbsence) ?? false,
         );
     }
 

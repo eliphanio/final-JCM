@@ -29,6 +29,11 @@ enum FoyerRole: string
                 FoyerPermission::UpdateFoyer,
                 FoyerPermission::CreateInvitation,
                 FoyerPermission::CancelInvitation,
+                FoyerPermission::AddFacture,
+                FoyerPermission::EffectuePayement,
+                FoyerPermission::AcceptAbsence,
+                FoyerPermission::AddAppareil,
+                FoyerPermission::RemoveAppareil,
             ],
             self::Member => [],
         };

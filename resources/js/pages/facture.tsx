@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import CreateFacturerModal from "@/components/create-facture-modal";
 import paye, { factures } from "@/routes/paye";
 import { useState } from "react";
+import { FoyerPermissions } from "@/types";
 
 interface Facture {
     id: number;
@@ -46,11 +47,12 @@ interface Repartition {
 
 interface FacturePageProps {
     facture: Facture;
+    permissions: FoyerPermissions;
     repartitions: Repartition[]
 }
 
 
-export default function Facture({ facture, repartitions = [] }: FacturePageProps) {
+export default function Facture({ facture, repartitions = [], permissions }: FacturePageProps) {
 
     const page = usePage<{
         currentFoyer: {
@@ -60,7 +62,7 @@ export default function Facture({ facture, repartitions = [] }: FacturePageProps
 
     const [open, setOpen] = useState<number | null>(null);
 
-    repartitions =repartitions.filter((repartition)=>
+    repartitions = repartitions.filter((repartition) =>
         repartition.reste > 0
     )
 
@@ -75,11 +77,15 @@ export default function Facture({ facture, repartitions = [] }: FacturePageProps
                         title="Facture"
                         description="Gérez sans problème les factures de votre foyer"
                     />
-                    <CreateFacturerModal>
-                        <Button >
-                            <Plus /> Nouvelle facture
-                        </Button>
-                    </CreateFacturerModal>
+                    {
+                        permissions.canAddFacture ? (
+                            <CreateFacturerModal>
+                                <Button >
+                                    <Plus /> Nouvelle facture
+                                </Button>
+                            </CreateFacturerModal>
+                        ) : null
+                    }
                 </div>
 
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3 m-3">
@@ -156,7 +162,10 @@ export default function Facture({ facture, repartitions = [] }: FacturePageProps
                                             <TableHead>Consommation individuel</TableHead>
                                             <TableHead>Total à payé</TableHead>
                                             <TableHead>Reste à payé</TableHead>
-                                            <TableHead>Action</TableHead>
+                                            {
+                                                permissions.canPaid ? (<TableHead>Action</TableHead>
+                                                ) : null
+                                            }
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -168,61 +177,65 @@ export default function Facture({ facture, repartitions = [] }: FacturePageProps
                                                     <TableCell>{repartition.part_commun} Ar</TableCell>
                                                     <TableCell>{repartition.total} Ar</TableCell>
                                                     <TableCell>{repartition.reste} Ar</TableCell>
-                                                    <TableCell>
-                                                        <Dialog open={open === repartition.id}
-                                                            onOpenChange={(value) => {
-                                                                if (!value) {
-                                                                    setOpen(null);
-                                                                }
-                                                            }}>
-                                                            <DialogTrigger asChild>
-                                                                <Button className="bg-green-500 hover:bg-green-400 h-8 w-8 p-0" onClick={() => setOpen(repartition.id)}>
-                                                                    <CheckIcon className="h-4 w-4" />
-                                                                </Button>
-                                                            </DialogTrigger>
-                                                            <DialogContent className="sm:max-w-106.25">
-                                                                <Form
-                                                                    action={paye.factures({
-                                                                        current_foyer: page.props.currentFoyer.slug,
-                                                                        repartition: repartition.id // Remplacer par votre variable réelle
-                                                                    }).url}
-                                                                    method="post"
-                                                                    className="space-y-6"
-                                                                    onSuccess={() => setOpen(null)}
-
-                                                                >
-                                                                    <DialogHeader>
-                                                                        <DialogTitle>Effectué un payement</DialogTitle>
-                                                                        <DialogDescription>
-                                                                            Payer une part ou la totalité de votre charge.
-                                                                        </DialogDescription>
-                                                                    </DialogHeader>
-                                                                    <div className="grid gap-2">
-                                                                        <Label htmlFor="amount">Montant</Label>
-                                                                        <Input
-                                                                            id="amount"
-                                                                            name="amount"
-                                                                            type="number"
-                                                                            placeholder={`Max: ${repartition.total} Ar`}
-                                                                            // defaultValue={repartition.total}
-                                                                            required
-                                                                        />
-                                                                    </div>
-                                                                    <DialogFooter className="gap-2">
-                                                                        <DialogClose asChild>
-                                                                            <Button variant="secondary">Cancel</Button>
-                                                                        </DialogClose>
-
-                                                                        <Button
-                                                                            type="submit"
-                                                                        >
-                                                                            Payé
+                                                    {
+                                                        permissions.canPaid ? (
+                                                            <TableCell>
+                                                                <Dialog open={open === repartition.id}
+                                                                    onOpenChange={(value) => {
+                                                                        if (!value) {
+                                                                            setOpen(null);
+                                                                        }
+                                                                    }}>
+                                                                    <DialogTrigger asChild>
+                                                                        <Button className="bg-green-500 hover:bg-green-400 h-8 w-8 p-0" onClick={() => setOpen(repartition.id)}>
+                                                                            <CheckIcon className="h-4 w-4" />
                                                                         </Button>
-                                                                    </DialogFooter>
-                                                                </Form>
-                                                            </DialogContent>
-                                                        </Dialog>
-                                                    </TableCell>
+                                                                    </DialogTrigger>
+                                                                    <DialogContent className="sm:max-w-106.25">
+                                                                        <Form
+                                                                            action={paye.factures({
+                                                                                current_foyer: page.props.currentFoyer.slug,
+                                                                                repartition: repartition.id // Remplacer par votre variable réelle
+                                                                            }).url}
+                                                                            method="post"
+                                                                            className="space-y-6"
+                                                                            onSuccess={() => setOpen(null)}
+
+                                                                        >
+                                                                            <DialogHeader>
+                                                                                <DialogTitle>Effectué un payement</DialogTitle>
+                                                                                <DialogDescription>
+                                                                                    Payer une part ou la totalité de votre charge.
+                                                                                </DialogDescription>
+                                                                            </DialogHeader>
+                                                                            <div className="grid gap-2">
+                                                                                <Label htmlFor="amount">Montant</Label>
+                                                                                <Input
+                                                                                    id="amount"
+                                                                                    name="amount"
+                                                                                    type="number"
+                                                                                    placeholder={`Max: ${repartition.total} Ar`}
+                                                                                    // defaultValue={repartition.total}
+                                                                                    required
+                                                                                />
+                                                                            </div>
+                                                                            <DialogFooter className="gap-2">
+                                                                                <DialogClose asChild>
+                                                                                    <Button variant="secondary">Cancel</Button>
+                                                                                </DialogClose>
+
+                                                                                <Button
+                                                                                    type="submit"
+                                                                                >
+                                                                                    Payé
+                                                                                </Button>
+                                                                            </DialogFooter>
+                                                                        </Form>
+                                                                    </DialogContent>
+                                                                </Dialog>
+                                                            </TableCell>
+                                                        ) : null
+                                                    }
                                                 </TableRow>
                                             ))
                                         }
