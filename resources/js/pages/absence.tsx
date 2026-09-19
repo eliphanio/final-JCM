@@ -154,8 +154,8 @@ export default function Absence({ absenceRequests, absences, permissions }: Abse
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead>Nom</TableHead>
-                                                <TableHead>Départ</TableHead>
-                                                <TableHead>Retour</TableHead>
+                                                <TableHead>Date de départ</TableHead>
+                                                <TableHead>Date deetour</TableHead>
                                                 {/* <TableHead>Motif</TableHead> */}
                                             </TableRow>
                                         </TableHeader>
