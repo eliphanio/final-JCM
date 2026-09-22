@@ -30,6 +30,10 @@
             }
         </style>
 
+        <link rel="icon" href="/icon.jpg" sizes="any">
+        <link rel="icon" href="/icon.jpg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/icon.jpg">
+
         @fonts
 
         @viteReactRefresh
