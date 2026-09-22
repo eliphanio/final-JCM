@@ -83,6 +83,7 @@ export default function CreateFacturerModal({ children }: PropsWithChildren) {
                                     id="electricite"
                                     name="electricite"
                                     type='number'
+                                    min="0"
                                     placeholder='10000'
                                     required
                                 />
@@ -94,6 +95,7 @@ export default function CreateFacturerModal({ children }: PropsWithChildren) {
                                     id="eau"
                                     name="eau"
                                     type='number'
+                                    min="0"
                                     placeholder='10000'
                                     required
                                 />
@@ -105,6 +107,7 @@ export default function CreateFacturerModal({ children }: PropsWithChildren) {
                                     id="consomation"
                                     name="consomation"
                                     type='number'
+                                    min="0"
                                     placeholder='250 (W)'
                                     required
                                 />

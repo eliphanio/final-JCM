@@ -215,6 +215,7 @@ export default function Facture({ facture, repartitions = [], permissions }: Fac
                                                                                     name="amount"
                                                                                     type="number"
                                                                                     placeholder={`Max: ${repartition.total} Ar`}
+                                                                                    min="0"
                                                                                     // defaultValue={repartition.total}
                                                                                     required
                                                                                 />

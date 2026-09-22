@@ -71,6 +71,7 @@ export default function CreateAppareilModal({ children }: PropsWithChildren) {
                                     id="power"
                                     name="power_watt"
                                     type="number"
+                                    min="0"
                                     placeholder="Puissance de l'appareil (W)"
                                     required
                                 />
@@ -82,6 +83,7 @@ export default function CreateAppareilModal({ children }: PropsWithChildren) {
                                     id="usage"
                                     name="usage"
                                     type="number"
+                                    min="1"
                                     placeholder="Heure d'utilisation de l'appareil (h)"
                                     required
                                 />
