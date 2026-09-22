@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         Schema::defaultStringLength(191);
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 
     /**
@@ -39,14 +42,15 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
+                ? Password::min(12)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
                 ->uncompromised()
-            : null,
+                : null,
         );
     }
 }
